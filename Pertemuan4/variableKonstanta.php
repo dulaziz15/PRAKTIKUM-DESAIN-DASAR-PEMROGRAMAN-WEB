@@ -6,7 +6,7 @@
 
     $benar = true;
     $salah = false;
-    echo "Variable benar: $benar, Variable salah: $salah";
+    echo " Variable benar: $benar, Variable salah: $salah";
 
     define("NAMA_SITUS", "Websiteku.com");
     define("TAHUN_PENDIRIAN", 2023);
