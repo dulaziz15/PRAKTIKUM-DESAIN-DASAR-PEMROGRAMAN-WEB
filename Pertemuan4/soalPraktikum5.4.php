@@ -24,4 +24,5 @@
             echo $data['nama'] . " mendapatkan nilai " . $data['nilai'] . "<br>";
         }
     }
+
 ?>
