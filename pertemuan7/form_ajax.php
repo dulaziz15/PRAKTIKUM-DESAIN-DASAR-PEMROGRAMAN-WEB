@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contoh Form dengan php</title>
+    <title>Contoh Form dengan PHP jquery</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
-    <h2>Form Contoh</h2>
+<h2>Form Contoh</h2>
     <form method="POST" action="proses_lanjut.php">
         
     <label for="buah">Pilih buah:</label>
@@ -35,6 +36,28 @@
     <input type="submit" value="submit">
     
     </form>
-    
+
+    <div id="hasil">
+
+    </div>
+
+    <script>
+        $(document).ready(function(){
+            $("#myForm").submit(function (e){
+                e.preventDefault();
+
+                var formData = $("myForm").serialize();
+
+                $.ajax({
+                    url: "proses_lanjut.php",
+                    type: "POST",
+                    data:formData,
+                    success:function (response){
+                        $("#hasil").html(response);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
