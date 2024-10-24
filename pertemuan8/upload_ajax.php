@@ -1,35 +1,31 @@
 <?php
-// Periksa apakah ada file yang diunggah
-if (isset($_FILES['file'])) {
-    // Inisialisasi array untuk menyimpan pesan error
+if(isset($_FILES['file'])){
     $errors = array();
+    $allowed_extensions = array("jpeg", "jpg", "png", "gif" ,"doc","docx","pdf");
+    
+    foreach($_FILES['file']['tmp_name'] as $key => $tmp_name) {
+        $file_name = $_FILES['file']['name'][$key];
+        $file_size = $_FILES['file']['size'][$key];
+        $file_tmp = $_FILES['file']['tmp_name'][$key];
+        $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 
-    // Ambil informasi tentang file yang diunggah
-    $fileName = $_FILES['file']['name'];
-    $fileSize = $_FILES['file']['size'];
-    $fileTmpName = $_FILES['file']['tmp_name'];
-    $fileType = $_FILES['file']['type'];
-    @$fileExt = strtolower("" . end(explode('.', $_FILES['file']['name'])) . "");
-
-    // Tentukan ekstensi file yang diizinkan
-    $allowedExtensions = ['pdf', 'doc', 'docx', 'txt'];
-
-    // Validasi ekstensi file
-    if (!in_array($fileExt, $allowedExtensions) === false) {
-        $errors[] = 'Ekstensi file yang diizinkan adalah PDF, DOC, DOCX, atau TXT.';
+        if(!in_array($file_ext, $allowed_extensions)) {
+            $errors[] = "$file_name: Ekstensi file yang diizinkan adalah PDF, DOC, DOCX, JPEG, JPG, PNG, atau GIF.";
+        }
+        if($file_size > 2097152) {
+            $errors[] = "$file_name: Ukuran file tidak boleh lebih dari 2 MB.";
+        }
+        if(empty($errors)) {
+            move_uploaded_file($file_tmp, "document/" . $file_name);
+            echo "$file_name berhasil diunggah.<br>";
+        }
     }
 
-    // Validasi ukuran file (maksimal 2 MB)
-    if ($fileSize > 2097152) {
-        $errors[] = 'Ukuran file tidak boleh lebih dari 2 MB.';
-    }
-
-    // Jika tidak ada error, pindahkan file ke direktori tujuan
-    if (empty($errors) == true) {
-        move_uploaded_file($fileTmpName, "documents/" . $fileName);
-        echo "File berhasil diunggah.";
-    } else {
-        // Tampilkan pesan error jika ada
-        echo implode(", ", $errors);
+    if(!empty($errors)){
+        echo implode("<br>", $errors);
     }
 }
+
+
+?>
+
